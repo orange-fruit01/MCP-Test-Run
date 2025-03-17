@@ -1,9 +1,7 @@
 # server.py
 from mcp.server.fastmcp import FastMCP
 import asyncio
-from crawl4ai import *
-
-# Run "mcp dev first-mcp.py"
+from crawl4ai import AsyncWebCrawler
 
 # Create an MCP server
 mcp = FastMCP("Demo")
@@ -19,6 +17,10 @@ async def crawl_web(url: str) -> str:
         )
         return result.markdown
 
+def main():
+    import uvicorn
+    uvicorn.run(mcp.app, host="0.0.0.0", port=8000)
+
 # Start the server
 if __name__ == "__main__":
-    mcp.run()
+    main()
