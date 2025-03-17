@@ -3,7 +3,6 @@ from mcp.server.fastmcp import FastMCP
 import asyncio
 import os
 from crawl4ai import AsyncWebCrawler
-from fastapi import FastAPI
 
 # Set environment variables for host and port
 os.environ["MCP_HOST"] = "0.0.0.0"
@@ -11,12 +10,6 @@ os.environ["MCP_PORT"] = "8000"
 
 # Create an MCP server
 mcp = FastMCP("Demo")
-app = mcp.app
-
-# Add a health endpoint
-@app.get("/health")
-async def health_check():
-    return {"status": "healthy"}
 
 # Add a web crawler tool
 @mcp.tool()
@@ -28,8 +21,14 @@ async def crawl_web(url: str) -> str:
         )
         return result.markdown
 
+# Add a health check tool
+@mcp.tool()
+def health_check() -> dict:
+    """Check if the server is healthy"""
+    return {"status": "healthy"}
+
 def main():
-    # Use the default run method without parameters
+    # Start the server
     mcp.run()
 
 # Start the server
