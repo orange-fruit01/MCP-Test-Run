@@ -1,21 +1,20 @@
-# Use a Python base image
-FROM python:3.11-slim
+FROM python:3.10-slim
 
-# Working directory
 WORKDIR /app
 
-# Copy dependencies
 COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Install dependencies
-RUN pip install --upgrade pip && \
-    pip install -r requirements.txt
-
-# Copy application code
 COPY . .
 
-# Expose port (default for FastMCP)
+# Set environment variables
+ENV MCP_HOST=0.0.0.0
+ENV MCP_PORT=8000
+
+# Add healthcheck
+HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
+  CMD curl -f http://localhost:8000/health || exit 1
+
 EXPOSE 8000
 
-# Run your MCP server
 CMD ["python", "server.py"]
