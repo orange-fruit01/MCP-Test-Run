@@ -6,7 +6,7 @@ from crawl4ai import AsyncWebCrawler
 
 # Set environment variables for host and port
 os.environ["MCP_HOST"] = "0.0.0.0"
-os.environ["MCP_PORT"] = "8000"
+os.environ["MCP_PORT"] = os.getenv("PORT", "8000")
 
 # Create an MCP server
 mcp = FastMCP("Demo")
